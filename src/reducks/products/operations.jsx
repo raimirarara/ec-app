@@ -1,8 +1,10 @@
 import {db, FirebaseTimestamp} from '../../firebase'
 import { push } from 'connected-react-router'
-import { deleteProductAction,fetchProductsAction } from './actions'
+import { deleteProductAction,fetchProductsAction} from './actions'
+
 
 const productsRef = db.collection('products')
+const perpage = 2
 
 export const orderProduct = (productsInCart, amount) => {
     return async (dispatch, getState) => {
@@ -99,24 +101,80 @@ export const deleteProduct = (id) => {
     }
 }
 
-
-export const fetchProducts = (gender, category) => {
+export const fetchNextPageProducts = (last) => {
     return async (dispatch) => {
-
         let query = productsRef.orderBy('updated_at', 'desc')
-        query = (gender !== '') ? query.where('gender', '==', gender) : query
-        query = (category !== '') ? query.where('category', '==', category) : query
-
-        query.get()
+        try{
+            let docSnapshot = await productsRef.doc(last.id).get() /* await でPromiseが完了した値を返す */
+            
+            let next = query.startAfter(docSnapshot).limit(perpage)
+            next
+            .get()
             .then( snapshots => {
                 const ProductList = []
                 snapshots.forEach( snapshot => {
                     const product = snapshot.data()
                     ProductList.push(product)
+                
                 })
                 dispatch(fetchProductsAction(ProductList))
             })
-    }
+        }
+        catch(error){
+            // dispatch(push('/')) これが反応しない!!!
+            alert('データが存在していません。')
+        }
+
+}}
+
+export const fetchPrevPageProducts = (first) => {
+    return async (dispatch) => {
+        let query = productsRef.orderBy('updated_at', 'desc')
+        try{
+            let docSnapshot = await productsRef.doc(first.id).get() /* await でPromiseが完了した値を返す */
+
+            let next = query.endBefore(docSnapshot).limitToLast(perpage)
+            next
+            .get()
+            .then( snapshots => {
+                const ProductList = []
+                snapshots.forEach( snapshot => {
+                    const product = snapshot.data()
+                    ProductList.push(product)
+                
+                })
+                dispatch(fetchProductsAction(ProductList))
+            })
+        }
+        catch(error){
+            alert('データが存在していません。')
+        }
+}}
+
+export const fetchProducts = (search, gender, category) => {
+    return async (dispatch) => {
+
+        let query = productsRef.orderBy('updated_at', 'desc')
+        
+        query = (search !== '') ? productsRef.orderBy('name').startAt(search).endAt(search + '\uf8ff') : query /* '\uf8ff'はほとんどのutf-8コードより後ろになるため、前方一致検索になるらしい */
+        query = (gender !== '') ? query.where('gender', '==', gender) : query
+        query = (category !== '') ? query.where('category', '==', category) : query
+
+
+        query.limit(perpage)
+            .get()
+            .then( snapshots => {
+                const ProductList = []
+                snapshots.forEach( snapshot => {
+                    const product = snapshot.data()
+                    ProductList.push(product)
+                
+                })
+        
+                dispatch(fetchProductsAction(ProductList))
+
+            })
+    }   
 }
 
 export const saveProduct = (id, name, description, category, gender, price, images, sizes) => {

@@ -52,7 +52,6 @@ const HeaderMenus = (props) => {
                 snapshots.docChanges().forEach(change => {
                     const product = change.doc.data();
                     const changeType = change.type
-                    console.log('favorite')
 
                     switch (changeType) {
                         case 'added':

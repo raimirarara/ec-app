@@ -46,16 +46,24 @@ const ClosableDrawer = (props) => {
     const dispatch = useDispatch()
 
     const [keyword, setKeyword] = useState('')
-    
-    const inputKeyword = useCallback( (event) => {
-        setKeyword(event.target.value)
-    },[setKeyword])
 
 
     const selectMenu = (event, path) => {
         dispatch(push(path))
         props.onClose(event)
     }
+
+    
+    const inputKeyword = useCallback( (event) => {
+        setKeyword(event.target.value)
+    },[setKeyword])
+
+    
+    const search = (event, keyword) => {
+        dispatch(push('/?search=' + keyword))
+        props.onClose(event)
+    }
+
 
     const [filters, setFilters] = useState([
         {func: selectMenu, label: 'すべて', id: 'all', value: '/'},
@@ -98,14 +106,14 @@ const ClosableDrawer = (props) => {
             >
                 <div
                     onClose={(e) => props.onClose(e)}
-                    onKeyDown={(e) => props.onClose(e)}
+                    // onKeyDown={(e) => props.onClose(e)}
                 >
                     <div className={classes.seachField}>
                         <TextInput
                             fullWidth={false} label={'キーワードを入力'} multiline={false}
                             onChange ={inputKeyword} value={keyword} required={false} rows={1} type={'text'}
                         />
-                        <IconButton>
+                        <IconButton  onClick={(e) => search(e, keyword)} >
                             <Search />
                         </IconButton>
                     </div>
