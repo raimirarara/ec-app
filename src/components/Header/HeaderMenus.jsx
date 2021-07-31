@@ -5,10 +5,10 @@ import { FavoriteBorder } from "@material-ui/icons"
 import { Menu } from "@material-ui/icons"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getProductsInCart } from "../../reducks/users/selectors"
+import { getProductsInCart, getProductsInFavorites } from "../../reducks/users/selectors"
 import { db } from "../../firebase"
 import { getUserId } from "../../reducks/users/selectors"
-import { fetchProductsInCart } from "../../reducks/users/operations"
+import { fetchProductsInCart, fetchProductsInFavorite } from "../../reducks/users/operations"
 import { push } from "connected-react-router"
 
 const HeaderMenus = (props) => {
@@ -16,10 +16,11 @@ const HeaderMenus = (props) => {
     const selector = useSelector((state) => state);
     const userId = getUserId(selector);
     let productsInCart = getProductsInCart(selector);
+    let productsInFavorites = getProductsInFavorites(selector);
 
-    // Listen products in user's cart
+    // Listen products in user's cart and user's favorites
     useEffect(() => {
-        const unsubscribe = db.collection('users').doc(userId).collection('cart')
+        const unsubscribeCart = db.collection('users').doc(userId).collection('cart')
             .onSnapshot(snapshots => {
 
                 snapshots.docChanges().forEach(change => {
@@ -45,7 +46,37 @@ const HeaderMenus = (props) => {
                 dispatch(fetchProductsInCart(productsInCart)) /*firebaseから受け取った状態をreducxのstoreで管理しているstateに反映させる？ */
             });
 
-        return () => unsubscribe()
+        const unsubscribeFavorite = db.collection('users').doc(userId).collection('favorites')
+            .onSnapshot(snapshots => {
+
+                snapshots.docChanges().forEach(change => {
+                    const product = change.doc.data();
+                    const changeType = change.type
+                    console.log('favorite')
+
+                    switch (changeType) {
+                        case 'added':
+                            productsInFavorites.push(product);
+                            break;
+                        case 'modified':
+                            const index = productsInFavorites.findIndex(product => product.favoriteId === change.doc.id)
+                            productsInFavorites[index] = product;
+                            break;
+                        case 'removed':
+                            productsInFavorites = productsInFavorites.filter(product => product.favoriteId !== change.doc.id);
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                dispatch(fetchProductsInFavorite(productsInFavorites)) /*firebaseから受け取った状態をreducxのstoreで管理しているstateに反映させる */
+            });
+
+        return (
+                () => unsubscribeCart(),
+                () => unsubscribeFavorite()
+            )
     },[]);
 
     return (
@@ -55,8 +86,10 @@ const HeaderMenus = (props) => {
                     <ShoppingCart />
                 </Badge>
             </IconButton>
-            <IconButton>
-                <FavoriteBorder />
+            <IconButton onClick={() => dispatch(push('/favorites'))}>
+                <Badge badgeContent={productsInFavorites.length} color="secondary">
+                    <FavoriteBorder />
+                </Badge>
             </IconButton>
             <IconButton onClick={(event) => props.handleDrawerToggle(event)} >
                 <Menu />
