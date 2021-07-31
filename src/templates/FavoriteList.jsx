@@ -1,8 +1,8 @@
 import { List } from "@material-ui/core"
 import { useDispatch, useSelector } from "react-redux"
-import { CartListItem } from "../components/Products"
+import { FavoriteListItem } from "../components/Products"
 import { PrimaryButton } from "../components/UIkit"
-import { getProductsInCart } from "../reducks/users/selectors"
+import { getProductsInFavorites } from "../reducks/users/selectors"
 import { GreyButton } from "../components/UIkit"
 import { useCallback } from "react"
 import { push } from "connected-react-router"
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 const FavoriteList = () => {
     const dispatch = useDispatch()
     const selector = useSelector( (state) => state)
-    const productsInCart = getProductsInCart(selector)
+    const productsInFavorites = getProductsInFavorites(selector)
 
     const classes = useStyles()
 
@@ -31,6 +31,8 @@ const FavoriteList = () => {
         dispatch(push('/'))
     },[])
 
+    console.log(productsInFavorites)
+
 
     return (
         <section className='c-section-warpin' >
@@ -38,13 +40,13 @@ const FavoriteList = () => {
                 お気に入り
             </h2>
             <List className={classes.root} >
-                {productsInCart.length > 0 && (
-                    productsInCart.map(product => <CartListItem key={product.cartId} product={product} />)
+                {productsInFavorites.length > 0 && (
+                    productsInFavorites.map(product => <FavoriteListItem key={product.favoriteId} product={product} />)
                 )}
             </List>
             <div className='module-spacer--medium' />
             <div className='p-grid__column' >
-                    <PrimaryButton label={'カートに入れる'} onClick={goToCart} />
+                    <PrimaryButton label={'カートの中身を見る'} onClick={goToCart} />
                     <div className='module-spacer--extra-extra-small' />
                     <GreyButton label={'ショッピングを続ける'} onClick={backToHome} />
             </div>

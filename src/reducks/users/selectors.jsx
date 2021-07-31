@@ -7,6 +7,11 @@ export const getOrdersHistory = createSelector(
     state => state.orders
 )
 
+export const getProductsInFavorites = createSelector(
+    [usersSelector],
+    state => state.favorites
+)
+
 export const getProductsInCart = createSelector(
     [usersSelector],
     state => state.cart

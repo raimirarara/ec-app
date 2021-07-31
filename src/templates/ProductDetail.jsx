@@ -8,7 +8,7 @@ import HTMLReactParser from 'html-react-parser'
 import { ImageSwiper } from "../components/Products"
 import { SizeTable } from "../components/Products"
 import { useCallback } from "react"
-import { addProductToCart } from "../reducks/users/operations"
+import { addProductToCart, addProductToFavorite } from "../reducks/users/operations"
 
 const useStyles = makeStyles( (theme) => ({
     sliderBox: {
@@ -66,19 +66,33 @@ const ProductDetail = () => {
                 })
     }, [])
 
-const addProduct = useCallback( (selectedSize) => {
+const addProduct = useCallback( (selectedSize , isCartOrFavorite) => {
     const timestamp = FirebaseTimestamp.now()
-    dispatch(addProductToCart({
-        added_at: timestamp,
-        description: product.description,
-        gender: product.gender,
-        images: product.images,
-        name: product.name,
-        price: product.price,
-        productId: product.id,
-        quantity: 1,
-        size: selectedSize
+    if (isCartOrFavorite){
+        dispatch(addProductToCart({
+            added_at: timestamp,
+            description: product.description,
+            gender: product.gender,
+            images: product.images,
+            name: product.name,
+            price: product.price,
+            productId: product.id,
+            quantity: 1,
+            size: selectedSize
+        }))
+    }else{
+        dispatch(addProductToFavorite({
+            added_at: timestamp,
+            description: product.description,
+            gender: product.gender,
+            images: product.images,
+            name: product.name,
+            price: product.price,
+            productId: product.id,
+            quantity: 1,
+            size: selectedSize
     }))
+    }
 }, [product])
 
     return (

@@ -11,12 +11,12 @@ export const UsersReducer = (state = initialState.users, action) => {
                 orders: [...action.payload]
                 // スプレッド構文 重複しているキーの値は上書きされ、存在しなかったフィールドが維持される
             }
-            case Actions.FETCH_PRODUCTS_IN_FAVORITES:
-            return{
-                ...state,
-                cart: [...action.payload]
-                // スプレッド構文 重複しているキーの値は上書きされ、存在しなかったフィールドが維持される
-            }
+        case Actions.FETCH_PRODUCTS_IN_FAVORITES:
+        return{
+            ...state,
+            favorites: [...action.payload]
+            // スプレッド構文 重複しているキーの値は上書きされ、存在しなかったフィールドが維持される
+        }
         case Actions.FETCH_PRODUCTS_IN_CART:
             return{
                 ...state,

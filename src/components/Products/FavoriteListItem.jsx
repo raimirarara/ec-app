@@ -37,8 +37,8 @@ const FavoriteListItem = (props) => {
    const name = props.product.name
    const size = props.product.size
 
-   const removeProductFromCart = (id) => {
-        return db.collection('users').doc(uid).collection('cart').doc(id)
+   const removeProductFromFavorites = (id) => {
+        return db.collection('users').doc(uid).collection('favorites').doc(id)
                 .delete()
    }
 
@@ -52,7 +52,7 @@ const FavoriteListItem = (props) => {
                 <ListItemText primary={name} secondary={'サイズ: ' + size}/>
                 <ListItemText primary={'¥' + price} />
             </div>
-            <IconButton onClick={() => removeProductFromCart(props.product.cartId)} className={classes.icon}  >
+            <IconButton onClick={() => removeProductFromFavorites(props.product.favoriteId)} className={classes.icon}  >
                 <Delete />
             </IconButton>
         </ListItem>

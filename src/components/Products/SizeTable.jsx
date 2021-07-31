@@ -32,7 +32,7 @@ const SizeTable = (props) => {
                                 </TableCell>
                                 <TableCell className={classes.iconCell} >
                                     {size.quentity > 0 ? (
-                                        <IconButton onClick={() => props.addProduct(size.size)} >
+                                        <IconButton onClick={() => props.addProduct(size.size, true)} >
                                             <ShoppingCart />
                                         </IconButton>   
                                     ) : (
@@ -40,7 +40,7 @@ const SizeTable = (props) => {
                                     )}
                                 </TableCell>
                                 <TableCell className={classes.iconCell} >
-                                    <IconButton onClick={() => props.addProduct(size.size)}>
+                                    <IconButton onClick={() => props.addProduct(size.size, false)}>
                                         <FavoriteBorder />
                                     </IconButton>
                                 </TableCell>
