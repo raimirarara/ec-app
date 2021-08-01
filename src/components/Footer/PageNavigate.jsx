@@ -34,9 +34,10 @@ const PageNavigate = (props) => {
                 </div>
             ) : (
                 <div className='u-text__headline u-text-center'>
-                            これ以上商品が存在しません。
-                            <br></br>
-                            <PrimaryButton label={'Go To Home'} onClick={backToHome} />
+                        これ以上商品が存在しません。
+                        <br></br>
+                        <div className='module-spacer--small' />
+                        <PrimaryButton label={'Go To Home'} onClick={backToHome} />
                 </div>
             )}
         </footer>
