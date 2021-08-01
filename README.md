@@ -1,6 +1,6 @@
 https://ec-app-f1f0b.web.app/
 
-ECアプリを作成しました。
+ECアプリ「net shop」を作成しました。
 
 決済機能を付ける予定です。
 
