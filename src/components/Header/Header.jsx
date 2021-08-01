@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/styles"
 import { AppBar } from "@material-ui/core"
 import { Toolbar } from "@material-ui/core"
-import logo from '../../assets/img/icons/logo.png'
+import logo from '../../assets/img/icons/netshop.PNG'
 import { useDispatch, useSelector } from "react-redux"
 import { getIsSignedIn } from "../../reducks/users/selectors"
 import {push} from 'connected-react-router'
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
         flexGrow: 1,
     },
     menuBar: {
-        backgroundColor: '#fff',
+        backgroundColor: '#80CCD0',
         color: '#444'   
     },
     toolBar: {
@@ -47,7 +47,7 @@ const Header = () => {
         <div className={classes.root} >
             <AppBar position='fixed' className={classes.menuBar}>
                 <Toolbar className={classes.toolBar} >
-                    <img src={logo} slt='torahack logo' width='128px' onClick={() => dispatch(push('/'))} />
+                    <img src={logo} slt='netshop logo' width='128px' onClick={() => dispatch(push('/'))} />
                     {isSignedIn && (
                         <div className={classes.iconButtons} >
                             <HeaderMenus handleDrawerToggle={handleDrawerToggle} />
