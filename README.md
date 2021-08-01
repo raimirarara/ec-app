@@ -10,7 +10,8 @@ Redux
 Firebase
 
 Reduxを用いる理由
--stateを管理するため
--stateをstoreで管理することでどこからでもstateを参照できるようにするため
--モジュールを疎結合にするため
+
+stateを管理するため
+stateをstoreで管理することでどこからでもstateを参照できるようにするため
+モジュールを疎結合にするため
 
