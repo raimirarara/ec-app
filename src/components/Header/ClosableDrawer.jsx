@@ -105,7 +105,7 @@ const ClosableDrawer = (props) => {
                 ModalProps={{keepMounted: true}}
             >
                 <div
-                    onClose={(e) => props.onClose(e)}
+                    onClick={(e) => props.onClose(e)}
                     // onKeyDown={(e) => props.onClose(e)}
                 >
                     <div className={classes.seachField}>

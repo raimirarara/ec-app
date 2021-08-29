@@ -35,7 +35,7 @@ const ImageArea = (props) => {
         uploadTask.then(() => {
             uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                 const newImage = { id: fileName, path: downloadURL}
-                props.setImages((prevState => [...prevState, newImage]))
+                props.setImages(prevState => [...prevState, newImage])
             })
         })
     
